@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+<h1>Register</h1>
+<form action="" method="post" class="mt-5">
+    <label for="username" class="form-label">Username:
+        <input type="text" name="username" id="username" class="form-control" required>
+    </label>
+    <label for="password" class="form-label">Password:
+        <input type="password" name="password" id="password" class="form-control" required>
+    </label>
+    <label for="type" class="form-label">
+        Type:
+        <select name="type" id="type" class="form-select" required>
+            {% for type in types %}
+            {% if type.name == 'admin' %}
+            pass
+            {% else %}
+            <option value="{{ type.name }}">{{ type.name|capitalize }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </label>
+    <input type="submit" value="Continue" class="btn btn-primary mt-3">
+
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+    h1 {
+        margin-top: 64px;
+        text-align: center;
+    }
+
+    select{
+        min-width: 210px;
+        min-height:40px;
+    }
+</style>
+{% endblock %}

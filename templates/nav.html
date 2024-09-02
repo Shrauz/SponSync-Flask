@@ -1,0 +1,67 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('index') }}">InSpo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                {% if user %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+                {% if user.type == "sponsor" %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('sponsor_profile') }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('sponsor_campaigns') }}">Campaigns</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('sponsor_ad_requests') }}">Ad-requests</a>
+                </li>
+                {% elif user.type == "influencer" %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('influencer_profile') }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('influencer_ad_requests') }}">Ad-requests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('influencer_campaigns') }}">Campaigns</a>
+                </li>
+                {% elif user.type == "admin" %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('admin_influencers') }}">Influencers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('admin_sponsors') }}">Sponsors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('admin_campaigns') }}">Campaigns</a>
+                </li>
+                {% endif %}
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('register' ) }}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<style>
+    .navbar {
+        width: 100%;
+        padding: 0;
+    }
+</style>

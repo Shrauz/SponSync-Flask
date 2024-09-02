@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="box">
+    <h2>Welcome to</h2>
+    <h1>InSpo</h1>
+    <a href="{{ url_for('login') }}" class="btn btn-info btn-small mt-5">Get Started !</a>
+</div>
+{% endblock %}
+
+{% block style %}
+<style>
+    .box {
+        display: flex;
+        height: 80vh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        font-size: 100px;
+    }
+
+    h2 {
+        font-size: 30px;
+    }
+</style>
+{% endblock %}

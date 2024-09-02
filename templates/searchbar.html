@@ -1,0 +1,59 @@
+<nav class="navbar">
+  <div class="container-fluid p-4">
+    <form class="d-flex" role="search">
+      <select name="factor" id="factor" class="form-select" required>
+        {% if user.type == 'influencer' %}
+        <option value="name">Name</option>
+        <option value="description">Description</option>
+        <option value="budget">Budget</option>
+        {% else %}
+        <option value="name">Name</option>
+        <option value="category">Category</option>
+        <option value="niche">Niche</option>
+        <option value="platform">Platform</option>
+        <option value="followers">Followers</option>
+        {% endif %}
+      </select>
+      {% if value %}
+      <input class="form-control me-2" type="search" placeholder="Type something" aria-label="Search" name="value"
+        value="{{ value }}">
+      {% else %}
+      <input class="form-control me-2" type="search" placeholder="Type something" aria-label="Search" name="value">
+      {% endif %}
+        <button class="btn btn-outline-success" type="submit">
+          <i class="fas fa-search fa-xs"></i>
+          Search
+        </button>
+      <button type="button" class="btn btn-outline-danger clear-button" onclick="clearSearch()">
+        <i class="fas fa-backspace    "></i>
+        Clear
+      </button>
+    </form>
+  </div>
+</nav>
+
+<style>
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  button {
+    width: 15%;
+    margin: 2px;
+  }
+
+  #factor {
+    width: 15%;
+    margin: 2px;
+  }
+</style>
+
+<script>
+  function clearSearch(){
+      window.location.href = window.location.href.split('?')[0];
+  }
+</script>

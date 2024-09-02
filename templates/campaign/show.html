@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Ad-requests of {{campaign.name}}
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mt-3">Ad-requests</h1>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>Showing ad-requests of {{campaign.name}} only</i></h3>
+    <a href="{{ url_for('add_request',id=campaign.id) }}" class="btn btn-success">
+        <i class="fas fa-plus fa-xs"></i>
+        Add
+    </a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Request Id</th>
+            <th>Requirements</th>
+            <th>Influencer</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    {% for ad in campaign.ad_requests %}
+    <tr>
+        <td>{{ad.id}}</td>
+        <td>{{ad.requirements}}</td>
+        <td>{{ad.influencer_id}}</td>
+        <td>{{ad.payment}}</td>
+        <td>
+            {% if ad.status == 'generated' %}
+            <span class="badge rounded-pill text-bg-secondary">Generated</span>
+            {% elif ad.status == 'accepted' or ad.status =='pending' %}
+            <span class="badge rounded-pill text-bg-warning">Pending</span>
+            {% elif ad.status == 'completed' %}
+            <span class="badge rounded-pill text-bg-success">Completed</span>
+            {% elif ad.status == 'sent' %}
+            <span class="badge rounded-pill text-bg-warning">Recieved</span>
+            {% elif ad.status == 'recieved' %}
+            <span class="badge rounded-pill text-bg-secondary">Sent</span>
+            {% elif ad.status == 'rejected' %}
+            <span class="badge rounded-pill text-bg-danger">Rejected</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ url_for('edit_request',id=ad.id) }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-edit fa-xs"></i>
+                Edit
+            </a>
+
+            <a href="{{ url_for('delete_request',id=ad.id) }}" class="btn btn-sm btn-danger">
+                <i class="fas fa-trash fa-xs"></i>
+                Delete
+            </a>
+        </td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}
+
+{% block style %}
+<style>
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% block title %}
+Add Campaign
+{% endblock %}
+
+{% block content %}
+<h1>Add Campaign</h1>
+<form method="post">
+    <label for="name" class="form-label">Name:
+        <input type="text" name="name" id="name" class="form-control" required>
+    </label>
+    <label for="description" class="form-label">Description:
+        <input type="text" name="description" id="description" class="form-control" required>
+    </label>
+    <label for="start_date" class="form-label">Start date:
+        <input type="date" name="start_date" id="start_date" class="form-control" min="{{ current_date }}">
+    </label>
+    <label for="end_date" class="form-label">End date:
+        <input type="date" name="end_date" id="end_date" class="form-control" min = "{{ current_date }}" required>
+    </label>
+    <label for="budget" class="form-label">Budget:
+        <input type="number" name="budget" id="budget" class="form-control" required>
+    </label>
+    <label for="visibility" class="form-label">Visibility:
+        <select name="visibility" id="visibility">
+            <option value="public">Public</option>
+            <option value="private">Private</option>a
+        </select>
+    </label>
+
+    <input type="submit" value="Save" class="btn btn-success">
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    h1 {
+        text-align: center;
+        margin-top: 64px;
+    }
+
+    form {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+{% endblock %}

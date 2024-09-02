@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% block title %}
+Admin Dashboard
+{% endblock %}
+{% block content %}
+<h1 class="mt-3">Admin Dashboard</h1>
+<div class="box">
+    <div id="flex">
+        {% if graph_url %}
+        <h2 class="text-muted"><i>Campaign Budgets</i></h2>
+        <img src="{{ graph_url }}" alt="Campaign Budgets">
+        {% else %}
+        <h2 class="text-muted"><i>No Campaign Budgets Available</i></h2>
+        {% endif %}
+    </div>
+    <div id="flex">
+        {% if pie_chart %}
+        <h2 class="text-muted"><i>User Types</i></h2>
+        <img src="{{ pie_chart }}" alt="User Types">
+
+        {% else %}
+        <h2 class="text-muted"><i>No Users available</i></h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block style %}
+<style>
+    img {
+        height: 350px;
+    }
+
+    #flex {
+        display: flex;
+        height: 80vh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}

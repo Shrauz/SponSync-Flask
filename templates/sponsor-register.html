@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Sponsor Register
+{% endblock %}
+
+{% block content %}
+<h1>Sponsor Register</h1>
+<form method="post" class="mt-5">
+    <label for="name" class="form-label">Name:
+        <input type="text" name="name" id="name" class="form-control" required>
+    </label>
+    
+    <label for="company" class="form-label">Company Name:
+        <input type="text" name="company" id="company" class="form-control" required>
+    </label>
+    
+    <label for="industry" class="form-label">Industry:
+        <input type="text" name="industry" id="industry" class="form-control" required>
+    </label>
+
+    <label for="email" class="form-label">E-mail:
+        <input type="email" name="email" id="email" class="form-control" required>
+    </label>
+
+    <input type="submit" value="Register" class="btn btn-primary mt-3">
+
+
+
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+    .group {
+        display: flex;
+        width: 40vw;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    h1 {
+        margin-top: 64px;
+        text-align: center;
+    }
+
+    select {
+        min-width: 210px;
+        min-height: 40px;
+    }
+</style>
+{% endblock %}

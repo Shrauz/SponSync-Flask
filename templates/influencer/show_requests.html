@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Ad-requests
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mt-3">Campaign details</h1>
+<div class="card-group m-5">
+<div class="card">
+    <h4 class="card-header">{{ campaign.name }}</h4>
+    <div class="card-body">
+        <h5 class="card-text"><em>{{campaign.description}}</em></h5>
+        <span class="card-text"><b>From : </b>{{campaign.start_date}}</span>
+        <span class="card-text m-5"><b>To : </b>{{campaign.end_date}}</span>
+        <p class="card-text"><b>Budget : </b>{{campaign.budget}}</p>
+    </div>
+</div>
+<div class="card">
+    <h4 class="card-header">Sponsored by</h4>
+    <div class="card-body">
+        <h5 class="card-text"><em>{{sponsor.company}}</em></h5>
+        <p class="card-text">~{{sponsor.name}}</p>
+        
+    </div>
+</div>
+</div>
+
+
+<h1 class="mt-3">Ad-requests</h1>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>Showing ad-requests of {{campaign.name}}</i></h3>
+
+</div>
+{% if ad_requests | length !=0 %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Request Id</th>
+            <th>Campaign Id</th>
+            <th>Requirements</th>
+            <th>Payment</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+{% endif %}
+
+    {% for ad in ad_requests %}
+   {% if ad.status != "completed" %}
+
+    <tr>
+        <td>{{ad.id}}</td>
+        <td>{{ad.campaign_id}}</td>
+        <td>{{ad.requirements}}</td>
+        <td>{{ad.payment}}</td>
+        <td>
+            {% if ad.status == "sent" %}
+            <p class="btn btn-sm btn-secondary">
+                <i class="fas fa-check fa-xs"></i>
+                Sent request
+            </p>
+            {% elif ad.status == "accepted" %}
+            <p class="btn btn-sm btn-success">
+                <i class="fas fa-check fa-xs"></i>
+                Accepted !
+            </p>
+            {% elif ad.status == "rejected" %}
+            <p class="btn btn-sm btn-danger">
+                <i class="fas fa-xmark fa-xs"></i>
+                Rejected !
+            </p>
+            {% else %}
+            <a href="{{ url_for('send_request',id=ad.id) }}" class="btn btn-sm btn-outline-success">
+                <i class="fas fa-share fa-xs"></i>
+                Send request
+                {% endif %}
+        </td>
+
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+</table>
+{% endblock %}
+
+{% block style %}
+<style>
+    body{
+        min-height: 200vh;
+    }
+
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    td {
+        max-width: 380px;
+    }
+</style>
+{% endblock %}

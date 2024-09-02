@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+{% block title %}
+Campaigns
+{% endblock %}
+{% block content %}
+<h1 class="mt-3">Campaigns</h1>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>On-going Campaigns</i></h3>
+    <a href="{{url_for('add_campaign')}}" class="btn btn-success">
+        <i class="fas fa-plus fa-xs"></i>
+        Add
+    </a>
+</div>
+
+<div class="box">
+    {% for campaign in campaigns %}
+    {% if campaign.sponsor_id == user.id %}
+    {% if campaign.start_date <= current_date <=campaign.end_date %} <div class="card m-5">
+        <h5 class="card-header">{{ campaign.name }}</h5>
+        <div class="card-body">
+            <!-- <h5 class="card-title">Special title treatment</h5> -->
+            <h5 class="card-text"><em>{{campaign.description}}</em></h5>
+            <span class="card-text"><b>From : </b>{{campaign.start_date}}</span>
+            <span class="card-text m-5"><b>To : </b>{{campaign.end_date}}</span>
+            <p>
+                <span class="card-text"><b>Budget : </b>{{campaign.budget}}</span>
+                <span class="card-text m-5"><b>Visibility : </b>{{campaign.visibility}}</span>
+            </p>
+            <a href="{{ url_for('show_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-success">
+                <i class="fas fa-search"></i>
+                Show
+            </a>
+            <a href="{{ url_for('edit_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-edit fa-xs"></i>
+                Edit
+            </a>
+            <a href="{{ url_for('delete_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash fa-xs"></i>
+                Delete
+            </a>
+        </div>
+    </div>
+{% endif %}
+{% endif %}
+{% endfor %}
+</div>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>All Campaigns</i></h3>
+</div>
+
+<div class="box">
+    {% for campaign in campaigns %}
+    {% if campaign.sponsor_id == user.id %}<div class="card m-5">
+        <h5 class="card-header">{{ campaign.name }}</h5>
+        <div class="card-body">
+            <!-- <h5 class="card-title">Special title treatment</h5> -->
+            <h5 class="card-text"><em>{{campaign.description}}</em></h5>
+            <span class="card-text"><b>From : </b>{{campaign.start_date}}</span>
+            <span class="card-text m-5"><b>To : </b>{{campaign.end_date}}</span>
+            <p>
+                <span class="card-text"><b>Budget : </b>{{campaign.budget}}</span>
+                <span class="card-text m-5"><b>Visibility : </b>{{campaign.visibility}}</span>
+            </p>
+            <a href="{{ url_for('show_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-success">
+                <i class="fas fa-search"></i>
+                Show
+            </a>
+            <a href="{{ url_for('edit_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-edit fa-xs"></i>
+                Edit
+            </a>
+            <a href="{{ url_for('delete_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-trash fa-xs"></i>
+                Delete
+            </a>
+        </div>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+</div>
+</div>
+
+
+
+{% endblock %}
+
+{% block style %}
+
+<style>
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+
+{% endblock %}

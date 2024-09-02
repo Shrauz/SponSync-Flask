@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Show influencers
+{% endblock %}
+
+{% block content %}
+{% include 'searchbar.html'   %}
+<h1 class="mt-3">Influencers</h1>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>Find influencer for Ad-request :-</i></h3>
+</div>
+
+<div class="card m-5" style="background-color: #e3f2fd;">
+    <h4 class="card-header">Ad-request - {{adrequest.id}}</h4>
+    <div class="card-body">
+        <h5 class="card-text"><em>{{adrequest.requirements}}</em></h5>
+    </div>
+</div>
+
+
+    {% for influencer in influencers %}
+    <div class="card m-5">
+        <h5 class="card-header">{{ influencer.name }}</h5>
+        <div class="card-body">
+          <p><span class="card-text"><b>Influencer id : </b>{{influencer.id}}</span>
+            <span class="card-text m-5"><b>Category : </b>{{influencer.category}}</span>
+            <span class="card-text m-5"><b>Niche : </b>{{influencer.niche}}</span>
+            </p>
+            <p>
+                <span class="card-text"><b>Platform : </b>{{influencer.platform}}</span>
+                <span class="card-text m-5"><b>Followers : </b>{{influencer.followers}}</span>
+                <span class="card-text m-5"><b>E-mail : </b>{{influencer.email}}</span>
+            </p>
+
+            {% if adrequest.status == "recieved" %}
+                <p class = "btn btn-sm btn-secondary">
+                    <i class="fas fa-check fa-xs"></i>
+                Sent request
+                </p>
+            {% else %}
+            <a href="{{ url_for('send_request_influencer',id=adrequest.id,inf=influencer.id) }}"
+                class="btn btn-sm btn-outline-success mt-2">
+                <i class="fas fa-share fa-xs"></i>
+               Send Request
+            </a>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endfor %}
+
+</table>
+{% endblock %}
+
+{% block style %}
+<style>
+    body{
+        min-height: 200vh;
+    }
+
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    td {
+        max-width: 380px;
+    }
+</style>
+{% endblock %}

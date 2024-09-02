@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+{% block title %}
+Campaigns
+{% endblock %}
+{% block content %}
+<h1 class="mt-3">Campaigns</h1>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>All Campaigns</i></h3>
+</div>
+
+{% if campaigns | length !=0 %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Sponsor id</th>
+            <th>Description</th>
+            <th>Start-date</th>
+            <th>End-date</th>
+            <th>Budget</th>
+            <th>Visibility</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    {% endif %}
+
+    {% for campaign in campaigns %}
+    {% if campaign.start_date <= current_date <=campaign.end_date %}
+    <tr style="background-color: #dee2e6;">
+        <td>{{ campaign.id }}</td>
+        <td>{{ campaign.name }}</td>
+        <td>{{ campaign.sponsor_id }}</td>
+        <td>{{ campaign.description }}</td>
+        <td>{{ campaign.start_date }}</td>
+        <td>{{ campaign.end_date }}</td>
+        <td>{{ campaign.budget }}</td>
+        <td>{{ campaign.visibility }}</td>
+        <td>
+            {% if campaign.flagged == False %}
+            <span class="badge rounded-pill text-bg-success">Not flagged</span>
+            {% else %}
+            <span class="badge rounded-pill text-bg-danger">Flagged</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if campaign.flagged == False %}
+            <a href="{{ url_for('flag_campaign',id=campaign.id) }}" class="btn btn-sm btn-danger">
+                <i class="fas fa-flag fa-xs"></i>
+                Flag
+            </a>
+            {% else %}
+            <a href="{{ url_for('unflag_campaign',id=campaign.id) }}" class="btn btn-sm btn-warning">
+                <i class="fas fa-bolt fa-xs"></i>
+                Unflag
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td>{{ campaign.id }}</td>
+        <td>{{ campaign.name }}</td>
+        <td>{{ campaign.sponsor_id }}</td>
+        <td>{{ campaign.description }}</td>
+        <td>{{ campaign.start_date }}</td>
+        <td>{{ campaign.end_date }}</td>
+        <td>{{ campaign.budget }}</td>
+        <td>{{ campaign.visibility }}</td>
+        <td>
+            {% if campaign.flagged == False %}
+            <span class="badge rounded-pill text-bg-success">Not flagged</span>
+            {% else %}
+            <span class="badge rounded-pill text-bg-danger">Flagged</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if campaign.flagged == False %}
+            <a href="{{ url_for('flag_campaign',id=campaign.id) }}" class="btn btn-sm btn-danger">
+                <i class="fas fa-flag fa-xs"></i>
+                Flag
+            </a>
+            {% else %}
+            <a href="{{ url_for('unflag_campaign',id=campaign.id) }}" class="btn btn-sm btn-warning">
+                <i class="fas fa-bolt fa-xs"></i>
+                Unflag
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    {% endblock %}
+
+    {% block style %}
+
+    <style>
+        .heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+
+    {% endblock %}

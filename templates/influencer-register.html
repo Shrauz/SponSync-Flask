@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Influencer Register
+{% endblock %}
+
+{% block content %}
+<h1>Influencer Register</h1>
+<form method="post" class="mt-5">
+    <div class="group">
+        <label for="name" class="form-label">Name:
+            <input type="text" name="name" id="name" class="form-control" required>
+        </label>
+
+        <label for="email" class="form-label">E-mail:
+            <input type="email" name="email" id="email" class="form-control" required>
+        </label>
+    </div>
+
+    <div class="group">
+        <label for="category" class="form-label">Category:
+            <input type="text" name="category" id="category" class="form-control" required>
+        </label>
+
+        <label for="niche" class="form-label">Niche:
+            <input type="text" name="niche" id="niche" class="form-control" required>
+        </label>
+    </div>
+
+    <div class="group">
+        <label for="platform" class="form-label">Platform:
+            <input type="text" name="platform" id="platform" class="form-control" required>
+        </label>
+
+        <label for="followers" class="form-label">Number of Followers:
+            <input type="number" name="followers" id="followers" class="form-control" required>
+        </label>
+    </div>
+
+    <input type="submit" value="Register" class="btn btn-primary mt-3">
+
+    <!-- <input type="submit" value="Continue" class="btn btn-primary mt-3"> -->
+
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+    .group{
+        display: flex;
+        width:40vw;
+        flex-direction: row;
+        justify-content: space-around ;
+    }
+
+    h1 {
+        margin-top: 64px;
+        text-align: center;
+    }
+
+    select {
+        min-width: 210px;
+        min-height: 40px;
+    }
+</style>
+{% endblock %}

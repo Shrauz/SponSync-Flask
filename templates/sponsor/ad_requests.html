@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Ad-requests
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mt-3">Ad-requests</h1>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>Showing all ad-requests of {{sponsor.company}}</i></h3>
+
+</div>
+{% if ad_requests | length !=0 %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Request Id</th>
+            <th>Campaign Id</th>
+            <th>Requirements</th>
+            <th>Influencer</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    {% endif %}
+
+    {% for ad in ad_requests %}
+    {% for camp in campaigns %}
+
+    {% if ad.campaign_id == camp.id %}
+
+    <tr>
+        <td>{{ad.id}}</td>
+        <td>{{ad.campaign_id}}</td>
+        <td>{{ad.requirements}}</td>
+        <td>
+            {% if ad.status == "sent" %}
+            <span>
+                <i class="fa fa-user"></i> {{ad.influencer_id}}
+            </span>
+            {% else %}
+            {{ad.influencer_id}}
+            {% endif %}
+        </td>
+        <td>{{ad.payment}}</td>
+        <td>
+            {% if ad.status == 'generated' %}
+            <span class="badge rounded-pill text-bg-secondary">Generated</span>
+            {% elif ad.status == 'pending' %}
+            <span class="badge rounded-pill text-bg-warning">Pending</span>
+            {% elif ad.status == 'sent' %}
+            <span class="badge rounded-pill text-bg-warning">Recieved</span>
+            {% elif ad.status == 'recieved' %}
+            <span class="badge rounded-pill text-bg-secondary">Sent</span>
+            {% elif ad.status == 'completed' %}
+            <span class="badge rounded-pill text-bg-success">Completed</span>
+            {% elif ad.status == 'accepted' %}
+            <span class="badge rounded-pill text-bg-success">Accepted</span>
+            {% elif ad.status == 'rejected' %}
+            <span class="badge rounded-pill text-bg-danger">Rejected</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if ad.status == "sent" %}
+            <a href="{{ url_for('accept_request',id=ad.id) }}" class="btn btn-sm btn-success">
+                <i class="fas fa-check fa-xs"></i>
+                Accept
+            </a>
+            <a href="{{ url_for('reject_request',id=ad.id) }}" class="btn btn-sm btn-danger">
+                <i class="fas fa-xmark fa-xs"></i>
+                Reject
+            </a>
+            {% elif not ad.influencer_id or ad.status=="rejected" or ad.status == "generated" %}
+            <a href="{{ url_for('find_influencers',id=ad.id) }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-search fa-xs"></i>
+                Search influencers
+            </a>
+            {% elif ad.status == "recieved" %}
+            <p class="btn btn-sm btn-outline-secondary"><em>Waiting</em></p>
+            {% elif ad.status != "completed" %}
+            <a href="{{ url_for('done_request',id=ad.id) }}" class="btn btn-sm btn-outline-success">
+                <i class="fas fa-check fa-xs"></i>
+                Mark as completed
+            </a>
+            {% else %}
+            <p class="text-center">-</p>
+            {% endif %}
+        </td>
+
+    </tr>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+</table>
+{% endblock %}
+
+{% block style %}
+<style>
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    td {
+        max-width: 380px;
+    }
+</style>
+{% endblock %}

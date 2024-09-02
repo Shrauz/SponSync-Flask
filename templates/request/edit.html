@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% block title %}
+Edit Ad-request
+{% endblock %}
+
+{% block content %}
+<h1>Edit Ad-request</h1>
+<form method="post">
+    <label for="requirements" class="form-label">Requirements:
+        <input type="text" name="requirements" id="requirements" class="form-control" value="{{ad.requirements}}" required>
+    </label>
+    <label for="payment" class="form-label">Payment amount:
+        <input type="number" name="payment" id="payment" class="form-control"  value="{{ad.payment}}" required>
+    </label>
+    <label for="influencer_id" class="form-label">Influencer Id:
+        <input type="number" name="influencer_id" id="influencer_id" class="form-control" value="{{ad.influencer_id}}">
+    </label>
+    <label for="status" class="form-label">Status:
+        <select name="status" id="status" class="form-select" required>
+            <option value="pending">Pending</option>
+            <option value="generated">Generated</option>
+            <option value="completed">Completed</option>
+        </select>
+    </label>
+    <input type="submit" value="Save" class="btn btn-success">
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    h1 {
+        text-align: center;
+        margin-top: 64px;
+    }
+
+    form {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+{% endblock %}

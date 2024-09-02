@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block title %}
+Delete Campaign
+{% endblock %}
+
+{% block content %}
+<h1>Delete</h1>
+<p class="text-center text-danger">Are you sure you want to delete {{ campaign.name }}??
+    This will also delete the ad-requests as well
+</p>
+<form method="post">
+    <input type="submit" value="Delete" class="btn btn-danger text-center m-2">
+    <a href="{{ url_for('sponsor_campaigns') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    h1 {
+        text-align: center;
+        margin-top: 64px;
+    }
+
+    form {
+        margin-top: 32px;
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+    }
+</style>
+{% endblock %}

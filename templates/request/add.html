@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block title %}
+Add Ad-request
+{% endblock %}
+
+{% block content %}
+<h1>Add Ad-request</h1>
+<form method="post">
+    <label for="requirements" class="form-label">Requirements:
+        <input type="text" name="requirements" id="requirements" class="form-control" required>
+    </label>
+    <label for="payment" class="form-label">Payment amount:
+        <input type="number" name="payment" id="payment" class="form-control" required>
+    </label>
+
+    <input type="submit" value="Save" class="btn btn-success">
+</form>
+{% endblock %}
+
+{% block style %}
+<style>
+    h1 {
+        text-align: center;
+        margin-top: 64px;
+    }
+
+    form {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+{% endblock %}
