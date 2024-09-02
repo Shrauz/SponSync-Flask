@@ -1,20 +1,41 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div class="container">
 <div class="box">
     <h2>Welcome to</h2>
-    <h1>InSpo</h1>
+    <h1>SponSync</h1>
     <a href="{{ url_for('login') }}" class="btn btn-info btn-small mt-5">Get Started !</a>
+</div>
+<div class="img">
+</div>
 </div>
 {% endblock %}
 
 {% block style %}
 <style>
+    .container{
+        margin-top: 30px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .img{
+        border: 8px solid white;
+        height: 80vh;
+        width: 40vw;
+        background-image: url("/static/front-img.jpg");
+        background-size: cover;
+        margin-left: 100px;
+    }
+
     .box {
         display: flex;
         height: 80vh;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
+        align-items: center;
     }
 
     h1 {
