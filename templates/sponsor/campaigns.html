@@ -16,8 +16,8 @@ Campaigns
     {% for campaign in campaigns %}
     {% if campaign.sponsor_id == user.id %}
     {% if campaign.start_date <= current_date <=campaign.end_date %} <div class="card m-5">
-        <h5 class="card-header">{{ campaign.name }}</h5>
-        <div class="card-body">
+        <h5 class="card-header" style="background-color:rgb(101, 35, 162) ;">{{ campaign.name }}</h5>
+        <div class="card-body" style="background-color:rgb(101, 35, 162) ;">
             <!-- <h5 class="card-title">Special title treatment</h5> -->
             <h5 class="card-text"><em>{{campaign.description}}</em></h5>
             <span class="card-text"><b>From : </b>{{campaign.start_date}}</span>
@@ -26,15 +26,15 @@ Campaigns
                 <span class="card-text"><b>Budget : </b>{{campaign.budget}}</span>
                 <span class="card-text m-5"><b>Visibility : </b>{{campaign.visibility}}</span>
             </p>
-            <a href="{{ url_for('show_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-success">
+            <a href="{{ url_for('show_campaign',id=campaign.id) }}" class="btn btn-sm btn-success">
                 <i class="fas fa-search"></i>
                 Show
             </a>
-            <a href="{{ url_for('edit_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-primary">
+            <a href="{{ url_for('edit_campaign',id=campaign.id) }}" class="btn btn-sm btn-primary">
                 <i class="fas fa-edit fa-xs"></i>
                 Edit
             </a>
-            <a href="{{ url_for('delete_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-danger">
+            <a href="{{ url_for('delete_campaign',id=campaign.id) }}" class="btn btn-sm btn-danger">
                 <i class="fas fa-trash fa-xs"></i>
                 Delete
             </a>
@@ -51,8 +51,8 @@ Campaigns
 <div class="box">
     {% for campaign in campaigns %}
     {% if campaign.sponsor_id == user.id %}<div class="card m-5">
-        <h5 class="card-header">{{ campaign.name }}</h5>
-        <div class="card-body">
+        <h5 class="card-header" style="background-color:rgb(101, 35, 162) ;">{{ campaign.name }}</h5>
+        <div class="card-body" style="background-color:rgb(101, 35, 162) ;">
             <!-- <h5 class="card-title">Special title treatment</h5> -->
             <h5 class="card-text"><em>{{campaign.description}}</em></h5>
             <span class="card-text"><b>From : </b>{{campaign.start_date}}</span>
@@ -61,15 +61,15 @@ Campaigns
                 <span class="card-text"><b>Budget : </b>{{campaign.budget}}</span>
                 <span class="card-text m-5"><b>Visibility : </b>{{campaign.visibility}}</span>
             </p>
-            <a href="{{ url_for('show_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-success">
+            <a href="{{ url_for('show_campaign',id=campaign.id) }}" class="btn btn-sm btn-success">
                 <i class="fas fa-search"></i>
                 Show
             </a>
-            <a href="{{ url_for('edit_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-primary">
+            <a href="{{ url_for('edit_campaign',id=campaign.id) }}" class="btn btn-sm btn-primary">
                 <i class="fas fa-edit fa-xs"></i>
                 Edit
             </a>
-            <a href="{{ url_for('delete_campaign',id=campaign.id) }}" class="btn btn-sm btn-outline-danger">
+            <a href="{{ url_for('delete_campaign',id=campaign.id) }}" class="btn btn-sm btn-danger">
                 <i class="fas fa-trash fa-xs"></i>
                 Delete
             </a>

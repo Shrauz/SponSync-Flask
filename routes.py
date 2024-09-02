@@ -40,7 +40,7 @@ def create_graph(id):
         graph_url = base64.b64encode(img.getvalue()).decode()
         return f'data:image/png;base64,{graph_url}'
     else:
-        return  
+        return ""
 
 
 def generate_user_type_pie_chart():
