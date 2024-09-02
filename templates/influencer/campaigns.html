@@ -15,7 +15,7 @@ Campaigns
     {% if campaign.visibility == "public" and campaign.start_date <= current_date <=campaign.end_date%}
         
     
-    <div class="card m-5">
+    <div class="card m-5" style="color:black">
         <h4 class="card-header">{{ campaign.name }}</h4>
         <div class="card-body">
             <h5 class="card-text mb-3"><em>{{campaign.description}}</em></h5>
@@ -51,6 +51,7 @@ Campaigns
         align-items: center;
         justify-content: space-around;
     }
+  
 </style>
 
 {% endblock %}
