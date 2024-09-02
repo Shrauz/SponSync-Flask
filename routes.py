@@ -15,7 +15,7 @@ from models import Types,User,Sponsor,Influencer,Campaign,AdRequest,db
 def create_graph(id):
     # Sample data from the database
     user = User.query.get(id)
-    if user.type == 'admin':
+    if user.type == 'admin': #hello
         campaigns = Campaign.query.all()
     else:
         campaigns = Campaign.query.filter_by(sponsor_id=id).all()
