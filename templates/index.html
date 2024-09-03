@@ -4,6 +4,9 @@
 <div class="box">
     <h2>Welcome to</h2>
     <h1>SponSync</h1>
+    <h2 class="text-center" style="font-weight: lighter;">
+        <i>Connecting Influencers and Sponsors</i>
+    </h2>
     <a href="{{ url_for('login') }}" class="btn btn-info btn-small mt-5">Get Started !</a>
 </div>
 <div class="img">
@@ -22,7 +25,6 @@
     }
 
     .img{
-        border: 8px solid white;
         height: 80vh;
         width: 40vw;
         background-image: url("/static/front-img.jpg");
@@ -32,7 +34,7 @@
 
     .box {
         display: flex;
-        height: 80vh;
+        height: 70vh;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -44,6 +46,7 @@
 
     h2 {
         font-size: 30px;
+        margin: 10px;;
     }
 </style>
 {% endblock %}

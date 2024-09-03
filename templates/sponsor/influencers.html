@@ -11,7 +11,7 @@ Show influencers
     <h3 class="text-muted"><i>Find influencer for Ad-request :-</i></h3>
 </div>
 
-<div class="card m-5" style="background-color: #5e18a4;">
+<div class="card m-5">
     <h4 class="card-header">Ad-request - {{adrequest.id}}</h4>
     <div class="card-body">
         <h5 class="card-text"><em>{{adrequest.requirements}}</em></h5>
@@ -20,7 +20,7 @@ Show influencers
 
 
     {% for influencer in influencers %}
-    <div class="card m-5" style="background-color: rgb(62, 27, 122);">
+    <div class="card m-5">
         <h5 class="card-header">{{ influencer.name }}</h5>
         <div class="card-body">
           <p><span class="card-text"><b>Influencer id : </b>{{influencer.id}}</span>
@@ -57,6 +57,10 @@ Show influencers
 <style>
     body{
         min-height: 200vh;
+    }
+
+    .card{
+        color: black;
     }
 
     .heading {

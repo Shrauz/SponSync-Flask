@@ -24,7 +24,7 @@ def create_graph(id):
         budgets = [campaign.budget for campaign in campaigns]
 
         # Generate the plot
-        colors = ["#F6FB7A","#B4E380","#88D66C","#73BBA3"]
+        colors = ["#FABC3F","#E85C0D","#C7253E","#821131"]
         fig, ax = plt.subplots()
         ax.bar(campaign_names, budgets ,color = colors)
         ax.set_xlabel('Campaigns')
