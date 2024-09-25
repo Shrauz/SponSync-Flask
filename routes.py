@@ -534,10 +534,11 @@ def influencer_profile():
         followers = request.form.get('followers')
         
         if cpassword == user.password:
+            u2 = User.query.filter_by(username=username)
             if user.username != username:
-                if User.query.filter_by(username=username):
+                if u2:
                     flash('User already exists')
-                    return redirect(url_for('sponsor_profile'))
+                    return redirect(url_for('influencer_profile'))
             else:
                 user.username = username
                 user.password = password

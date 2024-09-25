@@ -49,7 +49,7 @@ Ad-requests
 {% endif %}
 
     {% for ad in ad_requests %}
-   {% if ad.status != "completed" %}
+   {% if ad.status != "completed" and ad.status!="accepted"%}
 
     <tr>
         <td>{{ad.id}}</td>
