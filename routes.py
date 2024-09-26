@@ -8,9 +8,14 @@ matplotlib.use('Agg')
 import io
 import base64
 
+
 from functools import wraps
 from app import app
 from models import Types,User,Sponsor,Influencer,Campaign,AdRequest,db
+
+
+
+
 
 def create_graph(id):
     # Sample data from the database
