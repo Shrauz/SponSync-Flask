@@ -19,7 +19,17 @@ Influencer Register
 
     <div class="group">
         <label for="category" class="form-label">Category:
-            <input type="text" name="category" id="category" class="form-control" required>
+                <select name="type" id="type" class="form-select" required>
+                    <option value="food">Food</option>
+                    <option value="arts">Arts</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="sports">Sports</option>
+                    <option value="music">Music</option>
+                    <option value="education">Education</option>
+                    <option value="medical">Medical</option>
+                    <option value="beauty">Beauty</option>
+                </select>
+    
         </label>
 
         <label for="niche" class="form-label">Niche:
