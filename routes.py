@@ -12,6 +12,10 @@ import base64
 from functools import wraps
 from app import app
 from models import Types,User,Sponsor,Influencer,Campaign,AdRequest,db
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 
 
@@ -671,3 +675,75 @@ def unflag_user(id):
     db.session.commit()
     flash('User un-flagged successfully!')
     return redirect(request.referrer) 
+
+data = {
+    'sponsors': [
+        {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
+        {'id': 2, 'category': 'Fashion', 'niche': 'Streetwear'},
+        {'id': 3, 'category': 'Tech', 'niche': 'Gadgets'},
+    ],
+    'influencers': [
+        {'id': 101, 'category': 'Fitness', 'niche': 'Yoga'},
+        {'id': 102, 'category': 'Fitness', 'niche': 'Nutrition'},
+        {'id': 103, 'category': 'Fashion', 'niche': 'Casual Wear'},
+        {'id': 104, 'category': 'Fashion', 'niche': 'Streetwear'},
+        {'id': 105, 'category': 'Tech', 'niche': 'Gadgets'},
+        {'id': 106, 'category': 'Travel', 'niche': 'Adventure'},
+    ]
+}
+
+sponsors_df = pd.DataFrame(data['sponsors'])
+influencers_df = pd.DataFrame(data['influencers'])
+
+# Combine category and niche into a single string for vectorization
+sponsors_df['combined'] = sponsors_df['category'] + " " + sponsors_df['niche']
+influencers_df['combined'] = influencers_df['category'] + " " + influencers_df['niche']
+
+# Vectorization using TF-IDF
+vectorizer = TfidfVectorizer()
+
+# Combine the series into a single DataFrame before vectorization
+combined_series = pd.concat([sponsors_df['combined'], influencers_df['combined']])
+
+# Fit and transform the combined data
+tfidf_matrix = vectorizer.fit_transform(combined_series)
+
+# Split the TF-IDF matrix back into sponsors and influencers
+sponsors_tfidf = tfidf_matrix[:len(sponsors_df)]
+influencers_tfidf = tfidf_matrix[len(sponsors_df):]
+
+# Calculate cosine similarity
+similarity_matrix = cosine_similarity(sponsors_tfidf, influencers_tfidf)
+
+# Function to get recommendations for sponsors
+def get_recommendations(sponsor_id, num_recommendations=2):
+    sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
+    similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
+    recommended_influencers = influencers_df.iloc[similar_influencers_indices]
+    return recommended_influencers[['id', 'category', 'niche']]
+
+
+def get_recommendations_by_category(user_category, influencers_df, num_recommendations=2):
+    # Filter influencers based on the user's category
+    filtered_influencers = influencers_df[influencers_df['category'].str.lower() == user_category.lower()]
+
+    # If no influencers found in the specified category
+    if filtered_influencers.empty:
+        print("No influencers found in this category.")
+        return pd.DataFrame()  # Return an empty DataFrame
+
+    # You can adjust the logic here if needed to apply additional filtering or scoring
+    return filtered_influencers[['id', 'category', 'niche']].head(num_recommendations)
+
+# Example: Get recommendations for sponsor with ID 1
+user_category = input("Enter the category you are interested in (e.g., Fitness, Fashion, Tech): ")
+
+
+recommendations = get_recommendations_by_category(user_category, influencers_df)
+
+    
+if not recommendations.empty:
+    print("Recommended Influencers:")
+    print(recommendations)
+else:
+    print("No recommendations found.")
