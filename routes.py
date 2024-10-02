@@ -16,8 +16,46 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+def fetch_similar_campaigns(influencer):
+    # Get all campaigns
+    all_campaigns = Campaign.query.all()
 
+    # List to store campaigns and their similarity scores
+    similar_campaigns = []
 
+    # Combine the influencer's category and niche into a single string
+    influencer_text = f"{influencer.category} {influencer.niche}"
+
+    # Create a list to store campaign descriptions (for vectorization)
+    campaign_texts = []
+    campaign_objects = []
+
+    for campaign in all_campaigns:
+        # Fetch the sponsor for this campaign
+        sponsor = Sponsor.query.get(campaign.sponsor_id)
+
+        # Combine the campaign's description and sponsor's industry
+        combined_text = f"{sponsor.industry} {campaign.description}"
+        campaign_texts.append(combined_text)
+        campaign_objects.append(campaign)
+
+    # Use TF-IDF vectorizer to convert the texts to vectors
+    vectorizer = TfidfVectorizer().fit_transform([influencer_text] + campaign_texts)
+
+    # Compute cosine similarities between the influencer and all campaigns
+    cosine_similarities = cosine_similarity(vectorizer[0:1], vectorizer[1:]).flatten()
+
+    # Filter campaigns with a similarity score higher than a threshold (e.g., 0.2)
+    for i, similarity in enumerate(cosine_similarities):
+        if similarity > 0.2:  # Adjust this threshold as necessary
+            similar_campaigns.append((campaign_objects[i], similarity))
+
+    # Sort by similarity (highest first)
+    similar_campaigns.sort(key=lambda x: x[1], reverse=True)
+
+    # Return only the campaign objects
+    print(similar_campaigns)
+    return [campaign for campaign, _ in similar_campaigns]
 
 
 
@@ -512,7 +550,8 @@ def influencer_campaigns():
         value = float(value)
         campaigns = Campaign.query.filter(Campaign.budget >= value).all()
     else:
-        campaigns = Campaign.query.all()
+        campaigns = fetch_similar_campaigns(influencer)
+        # campaigns = Campaign.query.all()
     return render_template('influencer/campaigns.html',user=user,influencer=influencer,campaigns=campaigns,current_date = date.today())
 
 
@@ -676,74 +715,75 @@ def unflag_user(id):
     flash('User un-flagged successfully!')
     return redirect(request.referrer) 
 
-data = {
-    'sponsors': [
-        {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
-        {'id': 2, 'category': 'Fashion', 'niche': 'Streetwear'},
-        {'id': 3, 'category': 'Tech', 'niche': 'Gadgets'},
-    ],
-    'influencers': [
-        {'id': 101, 'category': 'Fitness', 'niche': 'Yoga'},
-        {'id': 102, 'category': 'Fitness', 'niche': 'Nutrition'},
-        {'id': 103, 'category': 'Fashion', 'niche': 'Casual Wear'},
-        {'id': 104, 'category': 'Fashion', 'niche': 'Streetwear'},
-        {'id': 105, 'category': 'Tech', 'niche': 'Gadgets'},
-        {'id': 106, 'category': 'Travel', 'niche': 'Adventure'},
-    ]
-}
+# data = {
+#     'sponsors': [
+#         {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
+#         {'id': 2, 'category': 'Fashion', 'niche': 'Streetwear'},
+#         {'id': 3, 'category': 'Tech', 'niche': 'Gadgets'},
+#     ],
+#     'influencers': [
+#         {'id': 101, 'category': 'Fitness', 'niche': 'Yoga'},
+#         {'id': 102, 'category': 'Fitness', 'niche': 'Nutrition'},
+#         {'id': 103, 'category': 'Fashion', 'niche': 'Casual Wear'},
+#         {'id': 104, 'category': 'Fashion', 'niche': 'Streetwear'},
+#         {'id': 105, 'category': 'Tech', 'niche': 'Gadgets'},
+#         {'id': 106, 'category': 'Travel', 'niche': 'Adventure'},
+#     ]
+# }
 
-sponsors_df = pd.DataFrame(data['sponsors'])
-influencers_df = pd.DataFrame(data['influencers'])
+# sponsors_df = pd.DataFrame(data['sponsors'])
+# influencers_df = pd.DataFrame(data['influencers'])
 
-# Combine category and niche into a single string for vectorization
-sponsors_df['combined'] = sponsors_df['category'] + " " + sponsors_df['niche']
-influencers_df['combined'] = influencers_df['category'] + " " + influencers_df['niche']
+# # Combine category and niche into a single string for vectorization
+# sponsors_df['combined'] = sponsors_df['category'] + " " + sponsors_df['niche']
+# influencers_df['combined'] = influencers_df['category'] + " " + influencers_df['niche']
 
-# Vectorization using TF-IDF
-vectorizer = TfidfVectorizer()
+# # Vectorization using TF-IDF
+# vectorizer = TfidfVectorizer()
 
-# Combine the series into a single DataFrame before vectorization
-combined_series = pd.concat([sponsors_df['combined'], influencers_df['combined']])
+# # Combine the series into a single DataFrame before vectorization
+# combined_series = pd.concat([sponsors_df['combined'], influencers_df['combined']])
 
-# Fit and transform the combined data
-tfidf_matrix = vectorizer.fit_transform(combined_series)
+# # Fit and transform the combined data
+# tfidf_matrix = vectorizer.fit_transform(combined_series)
 
-# Split the TF-IDF matrix back into sponsors and influencers
-sponsors_tfidf = tfidf_matrix[:len(sponsors_df)]
-influencers_tfidf = tfidf_matrix[len(sponsors_df):]
+# # Split the TF-IDF matrix back into sponsors and influencers
+# sponsors_tfidf = tfidf_matrix[:len(sponsors_df)]
+# influencers_tfidf = tfidf_matrix[len(sponsors_df):]
 
-# Calculate cosine similarity
-similarity_matrix = cosine_similarity(sponsors_tfidf, influencers_tfidf)
+# # Calculate cosine similarity
+# similarity_matrix = cosine_similarity(sponsors_tfidf, influencers_tfidf)
 
-# Function to get recommendations for sponsors
-def get_recommendations(sponsor_id, num_recommendations=2):
-    sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
-    similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
-    recommended_influencers = influencers_df.iloc[similar_influencers_indices]
-    return recommended_influencers[['id', 'category', 'niche']]
-
-
-def get_recommendations_by_category(user_category, influencers_df, num_recommendations=2):
-    # Filter influencers based on the user's category
-    filtered_influencers = influencers_df[influencers_df['category'].str.lower() == user_category.lower()]
-
-    # If no influencers found in the specified category
-    if filtered_influencers.empty:
-        print("No influencers found in this category.")
-        return pd.DataFrame()  # Return an empty DataFrame
-
-    # You can adjust the logic here if needed to apply additional filtering or scoring
-    return filtered_influencers[['id', 'category', 'niche']].head(num_recommendations)
-
-# Example: Get recommendations for sponsor with ID 1
-user_category = input("Enter the category you are interested in (e.g., Fitness, Fashion, Tech): ")
+# # Function to get recommendations for sponsors
+# def get_recommendations(sponsor_id, num_recommendations=2):
+#     sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
+#     similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
+#     recommended_influencers = influencers_df.iloc[similar_influencers_indices]
+#     return recommended_influencers[['id', 'category', 'niche']]
 
 
-recommendations = get_recommendations_by_category(user_category, influencers_df)
+# def get_recommendations_by_category(user_category, influencers_df, num_recommendations=2):
+#     # Filter influencers based on the user's category
+#     filtered_influencers = influencers_df[influencers_df['category'].str.lower() == user_category.lower()]
+
+#     # If no influencers found in the specified category
+#     if filtered_influencers.empty:
+#         print("No influencers found in this category.")
+#         return pd.DataFrame()  # Return an empty DataFrame
+
+#     # You can adjust the logic here if needed to apply additional filtering or scoring
+#     return filtered_influencers[['id', 'category', 'niche']].head(num_recommendations)
+
+# # Example: Get recommendations for sponsor with ID 1
+# user_category = input("Enter the category you are interested in (e.g., Fitness, Fashion, Tech): ")
+
+
+# recommendations = get_recommendations_by_category(user_category, influencers_df)
 
     
-if not recommendations.empty:
-    print("Recommended Influencers:")
-    print(recommendations)
-else:
-    print("No recommendations found.")
+# if not recommendations.empty:
+#     print("Recommended Influencers:")
+#     print(recommendations)
+# else:
+#     print("No recommendations found.")
+
