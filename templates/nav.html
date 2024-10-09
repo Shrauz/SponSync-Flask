@@ -11,28 +11,28 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('logout') }}">Logout</a>
-                </li>
+                </li> -->
                 {% if user.type == "sponsor" %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('sponsor_profile') }}">Profile</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('sponsor_campaigns') }}">Campaigns</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('sponsor_ad_requests') }}">Ad-requests</a>
                 </li>
-                {% elif user.type == "influencer" %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('influencer_profile') }}">Profile</a>
+                <li class="nav-item profile">
+                    <a class="nav-link active" href="{{ url_for('sponsor_profile') }}"><i class="fa-solid fa-user"></i>Profile</a>
                 </li>
+                {% elif user.type == "influencer" %}
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('influencer_ad_requests') }}">Ad-requests</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('influencer_campaigns') }}">Campaigns</a>
+                </li>
+                <li class="nav-item profile">
+                    <a class="nav-link active" href="{{ url_for('influencer_profile') }}"><i class="fa-solid fa-user"></i>Profile</a>
                 </li>
                 {% elif user.type == "admin" %}
                 <li class="nav-item">
@@ -73,5 +73,9 @@
 
     li:hover {
         text-decoration: underline;
+    }
+
+    .profile{
+        margin-left: 700px;
     }
 </style>

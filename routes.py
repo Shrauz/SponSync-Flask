@@ -213,6 +213,9 @@ def influencer_register(id):
         niche = request.form.get('niche')
         platform = request.form.get('platform')
         followers = request.form.get('followers')
+        if(followers<10000):
+            flash("You need to have minimum 10k followers to explore.Please try later.")
+            return redirect(url_for('index'))
         influencer = Influencer(id=id,name=name,email=email,category=category,niche=niche,platform=platform,followers=followers)
         db.session.add(influencer)
         db.session.commit()
@@ -259,6 +262,12 @@ def add_campaign():
         if name == "":
             flash('Campaign name cannot be empty')
             return redirect(url_for('add_campaign'))
+        
+        c = Campaign.query.filter_by(name=name)
+        if c :
+            flash('Campaign name already exists.Please try with another name!')
+            return redirect(url_for('add_campaign'))
+        
         if not re.match(r'^\d+(\.\d+)?$',budget):
             flash('Budget must be a number')
             return redirect(url_for('add_campaign'))
