@@ -29,7 +29,7 @@ Campaigns
 
     {% for campaign in campaigns %}
     {% if campaign.start_date <= current_date <=campaign.end_date %}         
-    <tr style = "background-color: rgb(59, 6, 79);">
+    <tr style = "background-color:grey;">
         <td>{{ campaign.id }}</td>
         <td>{{ campaign.name }}</td>
         <td>{{ campaign.sponsor_id }}</td>
@@ -102,7 +102,13 @@ Campaigns
             justify-content: space-between;
             align-items: center;
         }
-    
+
+        tr{
+            color: black;
+        }
+        td{
+            color: black;
+        }
     </style>
 
     {% endblock %}

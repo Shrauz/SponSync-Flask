@@ -140,7 +140,10 @@ def dashboard():
     user = User.query.get(session['user_id'])
     if user.type == 'influencer':
         influencer = Influencer.query.get(user.id)
-        return render_template('influencer.html',influencer=influencer,user=user)
+        campaigns = fetch_similar_campaigns(influencer)
+        # campaigns = Campaign.query.all()
+        # return render_template('influencer/campaigns.html',user=user,influencer=influencer,campaigns=campaigns,current_date = date.today())
+        return render_template('influencer.html',influencer=influencer,user=user,campaigns=campaigns,current_date = date.today())
     elif user.type == 'sponsor':
         campaigns = Campaign.query.all()
         graph_url = create_graph(user.id)
@@ -215,6 +218,12 @@ def influencer_register(id):
         niche = request.form.get('niche')
         platform = request.form.get('platform')
         followers = request.form.get('followers')
+        if(int(followers)<10000):
+            user = User.query.get(id)
+            db.session.delete(user)
+            db.session.commit()
+            flash("You need to have minimum 10k followers to register!")
+            return redirect(url_for('index'))
         influencer = Influencer(id=id,name=name,email=email,category=category,niche=niche,platform=platform,followers=followers)
         db.session.add(influencer)
         db.session.commit()
@@ -246,6 +255,33 @@ def logout():
         return redirect(url_for('index'))
     return render_template('logout.html',user=user)
 
+@app.route('/change_password/',methods=['GET','POST'])
+@auth_required
+def change_password():
+    user = User.query.get(session['user_id'])
+    if request.method == "POST":
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        if old_password == user.password :
+            if old_password == new_password:
+                flash('Old and new password cannot be the same')
+                return redirect(url_for('change_password'))
+            if new_password != confirm_password:
+                flash('Passwords do not match')
+                return redirect(url_for('change_password'))
+            user.password = new_password
+            db.session.commit()
+            flash('Password changed successfully')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Old password is incorrect')
+            return redirect(url_for('change_password'))
+    return render_template('change_password.html',user=user)
+        
+        
+    
+
 @app.route('/campaign/add',methods=['GET','POST'])
 @auth_required
 def add_campaign():
@@ -261,6 +297,12 @@ def add_campaign():
         if name == "":
             flash('Campaign name cannot be empty')
             return redirect(url_for('add_campaign'))
+        
+        c = Campaign.query.filter_by(name=name)
+        if c :
+            flash('Campaign name already exists. Please try with another name!')
+            return redirect(url_for('add_campaign'))
+        
         if not re.match(r'^\d+(\.\d+)?$',budget):
             flash('Budget must be a number')
             return redirect(url_for('add_campaign'))
@@ -454,32 +496,28 @@ def sponsor_profile():
     sponsor = Sponsor.query.get(user.id)
     if request.method == 'POST':
         username = request.form.get('username')
-        cpassword = request.form.get('cpassword')
-        password = request.form.get('password')
         name = request.form.get('name')
         email = request.form.get('email')
         company = request.form.get('company')
         industry = request.form.get('industry')
         
-        if cpassword == user.password:
-            if user.username != username:
-                if User.query.filter_by(username=username):
-                    flash('User already exists')
-                    return redirect(url_for('sponsor_profile'))
-            else:
-                user.username = username
-                user.password = password
-                sponsor.name = name
-                sponsor.email = email
-                sponsor.company = company
-                sponsor.industry = industry
-        
-                db.session.commit()
-                flash('Profile edited successfully ♥')
-                return redirect(url_for('dashboard'))
+    
+        if user.username != username:
+            if User.query.filter_by(username=username):
+                flash('User already exists')
+                return redirect(url_for('sponsor_profile'))
         else:
-            flash('Incorrect password')
-            return redirect(url_for('sponsor_profile'))
+            user.username = username
+            sponsor.name = name
+            sponsor.email = email
+            sponsor.company = company
+            sponsor.industry = industry
+        
+            db.session.commit()
+            flash('Profile edited successfully ♥')
+            return redirect(url_for('dashboard'))
+        
+        return redirect(url_for('sponsor_profile'))
         
        
     return render_template('sponsor/profile.html',user=user,sponsor=sponsor)
@@ -552,8 +590,8 @@ def influencer_campaigns():
         value = float(value)
         campaigns = Campaign.query.filter(Campaign.budget >= value).all()
     else:
-        campaigns = fetch_similar_campaigns(influencer)
-        # campaigns = Campaign.query.all()
+        # campaigns = fetch_similar_campaigns(influencer)
+        campaigns = Campaign.query.all()
     return render_template('influencer/campaigns.html',user=user,influencer=influencer,campaigns=campaigns,current_date = date.today())
 
 
@@ -574,8 +612,6 @@ def influencer_profile():
     influencer = Influencer.query.get(user.id)
     if request.method == 'POST':
         username = request.form.get('username')
-        cpassword = request.form.get('cpassword')
-        password = request.form.get('password')
         name = request.form.get('name')
         email = request.form.get('email')
         category = request.form.get('category')
@@ -583,30 +619,26 @@ def influencer_profile():
         platform = request.form.get('platform')
         followers = request.form.get('followers')
         
-        if cpassword == user.password:
-            u2 = User.query.filter_by(username=username)
-            if user.username != username:
-                if u2:
-                    flash('User already exists')
-                    return redirect(url_for('influencer_profile'))
-            else:
-                user.username = username
-                user.password = password
-                influencer.name = name
-                influencer.email = email
-                influencer.category = category
-                influencer.niche = niche
-                influencer.platform = platform
-                influencer.followers = followers
-        
-                db.session.commit()
-                flash('Profile edited successfully ♥')
-                return redirect(url_for('dashboard'))
-        else:
-            flash('Incorrect password')
+
+        u2 = User.query.filter_by(username=username)
+        if u2:
+            flash('User already exists')
             return redirect(url_for('influencer_profile'))
+        else:
+            user.username = username
+            influencer.name = name
+            influencer.email = email
+            influencer.category = category
+            influencer.niche = niche
+            influencer.platform = platform
+            influencer.followers = followers
         
-       
+            db.session.commit()
+            flash('Profile edited successfully ♥')
+        return redirect(url_for('dashboard'))
+        
+        # return redirect(url_for('influencer_profile'))
+        
     return render_template('influencer/profile.html',user=user,influencer=influencer)
 
 @app.route('/sponsor/<int:id>/influencers')
@@ -717,7 +749,7 @@ def unflag_user(id):
     flash('User un-flagged successfully!')
     return redirect(request.referrer) 
 
-
+<<<<<<< HEAD
 data = {
     'sponsors': [
         {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
@@ -1527,7 +1559,7 @@ data = {
   }
     ]
 }
-
+=======
 # data = {
 #     'sponsors': [
 #         {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
@@ -1542,7 +1574,8 @@ data = {
 #         {'id': 105, 'category': 'Tech', 'niche': 'Gadgets'},
 #         {'id': 106, 'category': 'Travel', 'niche': 'Adventure'},
 #     ]
-#
+# }
+>>>>>>> 31117d779dc03aa6008b03d3e8fec1c24ec4fe98
 
 # sponsors_df = pd.DataFrame(data['sponsors'])
 # influencers_df = pd.DataFrame(data['influencers'])
@@ -1567,12 +1600,21 @@ data = {
 # # Calculate cosine similarity
 # similarity_matrix = cosine_similarity(sponsors_tfidf, influencers_tfidf)
 
+<<<<<<< HEAD
+# Function to get recommendations for sponsors
+def get_recommendations(sponsor_id, num_recommendations=2):
+    sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
+    similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
+    recommended_influencers = influencers_df.iloc[similar_influencers_indices]
+    return recommended_influencers[['id', 'category', 'niche','name']]
+=======
 # # Function to get recommendations for sponsors
 # def get_recommendations(sponsor_id, num_recommendations=2):
 #     sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
 #     similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
 #     recommended_influencers = influencers_df.iloc[similar_influencers_indices]
 #     return recommended_influencers[['id', 'category', 'niche']]
+>>>>>>> 31117d779dc03aa6008b03d3e8fec1c24ec4fe98
 
 
 # def get_recommendations_by_category(user_category, influencers_df, num_recommendations=2):
@@ -1584,8 +1626,13 @@ data = {
 #         print("No influencers found in this category.")
 #         return pd.DataFrame()  # Return an empty DataFrame
 
+<<<<<<< HEAD
+    # You can adjust the logic here if needed to apply additional filtering or scoring
+    return filtered_influencers[['id', 'category', 'niche','name']].head(num_recommendations)
+=======
 #     # You can adjust the logic here if needed to apply additional filtering or scoring
 #     return filtered_influencers[['id', 'category', 'niche']].head(num_recommendations)
+>>>>>>> 31117d779dc03aa6008b03d3e8fec1c24ec4fe98
 
 # # Example: Get recommendations for sponsor with ID 1
 # user_category = input("Enter the category you are interested in (e.g., Fitness, Fashion, Tech): ")
@@ -1599,17 +1646,4 @@ data = {
 #     print(recommendations)
 # else:
 #     print("No recommendations found.")
-
-# Example ground truth (actual influencers selected by sponsors)
-actual_influencers = [[101, 102], [201, 202], [301], [401, 402, 403]]  # True values
-
-# Example predicted influencers from your recommendation system
-predicted_influencers = [[101, 102, 103], [201, 202], [301, 303], [401, 404]]  # Predictions
-
-# Flattening the lists for ease of comparison
-flat_actual = [influencer for sublist in actual_influencers for influencer in sublist]
-flat_predicted = [influencer for sublist in predicted_influencers for influencer in sublist]
-
-# Calculate precision, recall, and F1 score
-
 

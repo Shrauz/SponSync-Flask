@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg" style="background-color: #e8dd5a;">
+<nav class="navbar navbar-expand-lg" style="background:linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('index') }}">SponSync</a>
+        <a class="navbar-brand" href="{{ url_for('index') }}"><i class="fa-solid fa-icons" style="color: white;">SponSync</i> </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,29 +11,42 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('logout') }}">Logout</a>
-                </li>
+                </li> -->
                 {% if user.type == "sponsor" %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('sponsor_profile') }}">Profile</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('sponsor_campaigns') }}">Campaigns</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('sponsor_ad_requests') }}">Ad-requests</a>
                 </li>
+                <li class="nav-item dropdown profile">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false"><i class="fa-solid fa-circle-user"></i></a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{{ url_for('sponsor_profile') }}">Your Profile</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('change_password')}}">Change password</a></li>
+                      <li><a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-from-bracket"></i>  Logout</a></li>
+                    </ul>
+                  </li>
                 {% elif user.type == "influencer" %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('influencer_profile') }}">Profile</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('influencer_ad_requests') }}">Ad-requests</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('influencer_campaigns') }}">Campaigns</a>
                 </li>
+                <!-- <li class="nav-item profile">
+                    <a class="nav-link active" href="{{ url_for('influencer_profile') }}"><i class="fa-solid fa-circle-user"></i></a>
+                </li> -->
+                <li class="nav-item dropdown profile">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false"><i class="fa-solid fa-circle-user"></i></a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{{ url_for('influencer_profile') }}">Your Profile</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('change_password')}}">Change password</a></li>
+                      <li><a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa-solid fa-arrow-right-from-bracket"></i>  Logout</a></li>
+                    </ul>
+                  </li>
                 {% elif user.type == "admin" %}
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('admin_influencers') }}">Influencers</a>
@@ -68,10 +81,26 @@
 
     li {
         padding: 10px 0px;
+        margin: 0px 30px;
+        color: white;
         font-size: 15px;
     }
 
     li:hover {
         text-decoration: underline;
+    }
+
+    .profile{
+        margin-left: 400px;
+        color: white;
+    }
+
+    .fa-circle-user{
+        font-size: 30px;
+        color: white;
+    }
+
+    .navbar-nav .nav-link.active, .navbar-nav .show>.nav-link {
+        color: white;
     }
 </style>
