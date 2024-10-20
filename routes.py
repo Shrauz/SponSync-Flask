@@ -15,6 +15,8 @@ from models import Types,User,Sponsor,Influencer,Campaign,AdRequest,db
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics import precision_score, recall_score, f1_score
+
 
 def fetch_similar_campaigns(influencer):
     # Get all campaigns
@@ -715,7 +717,7 @@ def unflag_user(id):
     flash('User un-flagged successfully!')
     return redirect(request.referrer) 
 
-<<<<<<< HEAD
+
 data = {
     'sponsors': [
         {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
@@ -1525,7 +1527,7 @@ data = {
   }
     ]
 }
-=======
+
 # data = {
 #     'sponsors': [
 #         {'id': 1, 'category': 'Fitness', 'niche': 'Yoga'},
@@ -1540,8 +1542,7 @@ data = {
 #         {'id': 105, 'category': 'Tech', 'niche': 'Gadgets'},
 #         {'id': 106, 'category': 'Travel', 'niche': 'Adventure'},
 #     ]
-# }
->>>>>>> 31117d779dc03aa6008b03d3e8fec1c24ec4fe98
+#
 
 # sponsors_df = pd.DataFrame(data['sponsors'])
 # influencers_df = pd.DataFrame(data['influencers'])
@@ -1566,21 +1567,12 @@ data = {
 # # Calculate cosine similarity
 # similarity_matrix = cosine_similarity(sponsors_tfidf, influencers_tfidf)
 
-<<<<<<< HEAD
-# Function to get recommendations for sponsors
-def get_recommendations(sponsor_id, num_recommendations=2):
-    sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
-    similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
-    recommended_influencers = influencers_df.iloc[similar_influencers_indices]
-    return recommended_influencers[['id', 'category', 'niche','name']]
-=======
 # # Function to get recommendations for sponsors
 # def get_recommendations(sponsor_id, num_recommendations=2):
 #     sponsor_idx = sponsors_df[sponsors_df['id'] == sponsor_id].index[0]
 #     similar_influencers_indices = similarity_matrix[sponsor_idx].argsort()[-num_recommendations:][::-1]
 #     recommended_influencers = influencers_df.iloc[similar_influencers_indices]
 #     return recommended_influencers[['id', 'category', 'niche']]
->>>>>>> 31117d779dc03aa6008b03d3e8fec1c24ec4fe98
 
 
 # def get_recommendations_by_category(user_category, influencers_df, num_recommendations=2):
@@ -1592,13 +1584,8 @@ def get_recommendations(sponsor_id, num_recommendations=2):
 #         print("No influencers found in this category.")
 #         return pd.DataFrame()  # Return an empty DataFrame
 
-<<<<<<< HEAD
-    # You can adjust the logic here if needed to apply additional filtering or scoring
-    return filtered_influencers[['id', 'category', 'niche','name']].head(num_recommendations)
-=======
 #     # You can adjust the logic here if needed to apply additional filtering or scoring
 #     return filtered_influencers[['id', 'category', 'niche']].head(num_recommendations)
->>>>>>> 31117d779dc03aa6008b03d3e8fec1c24ec4fe98
 
 # # Example: Get recommendations for sponsor with ID 1
 # user_category = input("Enter the category you are interested in (e.g., Fitness, Fashion, Tech): ")
@@ -1612,4 +1599,17 @@ def get_recommendations(sponsor_id, num_recommendations=2):
 #     print(recommendations)
 # else:
 #     print("No recommendations found.")
+
+# Example ground truth (actual influencers selected by sponsors)
+actual_influencers = [[101, 102], [201, 202], [301], [401, 402, 403]]  # True values
+
+# Example predicted influencers from your recommendation system
+predicted_influencers = [[101, 102, 103], [201, 202], [301, 303], [401, 404]]  # Predictions
+
+# Flattening the lists for ease of comparison
+flat_actual = [influencer for sublist in actual_influencers for influencer in sublist]
+flat_predicted = [influencer for sublist in predicted_influencers for influencer in sublist]
+
+# Calculate precision, recall, and F1 score
+
 
