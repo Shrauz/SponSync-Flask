@@ -3,10 +3,53 @@
 <div class="box">
     <h1>Hello Influencer</h1>
 </div>
+<h2 class="mt-3">Recommended Campaigns</h2>
+<div class="heading m-4">
+    <h3 class="text-muted"><i>On-going Campaigns</i></h3>
+</div>
+
+<div class="box">
+    {% for campaign in campaigns %}
+
+    {% if campaign.visibility == "public" and campaign.start_date <= current_date <=campaign.end_date%}
+        
+    
+    <div class="card m-5" style="color:black">
+        <h4 class="card-header">{{ campaign.name }}</h4>
+        <div class="card-body">
+            <h5 class="card-text mb-3"><em>{{campaign.description}}</em></h5>
+            <p class="card-text">From : {{campaign.start_date}}</p>
+            <p class="card-text">To : {{campaign.end_date}}</p>
+            <p class="card-text">Budget : {{campaign.budget}}</p>
+            <a href="{{ url_for('show_requests',id=campaign.id) }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-search"></i>
+                Show Ad-requests
+            </a>
+        </div>
+    </div>
+    
+    {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block style %}
+
 <style>
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .card{
+        max-width: 250px;
+    }
+    .box{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+    }
     .box {
         display: flex;
         height: 80vh;
@@ -14,10 +57,10 @@
         align-items: center;
         justify-content: center;
     }
-
-
     h1 {
         font-size: 100px;
     }
 </style>
 {% endblock %}
+
+\

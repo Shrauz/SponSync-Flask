@@ -7,8 +7,11 @@
     <h3 class="text-center" style="font-weight: lighter;">
         <i>connecting influencers and sponsors</i>
     </h3>
+
+    {% if not user %}
     <a href="{{ url_for('login') }}" class="btn btn-info btn-small mt-5">Get Started !</a>
-</div>
+    {% endif %}
+</div> 
 <div class="img">
 </div>
 </div>

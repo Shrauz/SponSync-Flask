@@ -7,7 +7,6 @@ Profile-{{user.username}}
 {% block content %}
 <h1>Sponsor Profile</h1>
 <form method="post" class="mt-3">
-    <a class="btn btn-danger m-3" href="{{ url_for('logout') }}">Logout</a>
 
     <h4 class="text-muted">Hello {{ sponsor.name }}!</h4>
     <label for="username" class="form-label">Username:
@@ -15,10 +14,6 @@ Profile-{{user.username}}
     </label>
 
     <div class="form-group">
-
-    <label for="cpassword" class="form-label">Password:
-        <input type="password" name="cpassword" id="cpassword" class="form-control" required>
-    </label>
 
     <!-- <label for="password" class="form-label">New password:
         <input type="password" name="password" id="password" class="form-control" required>
